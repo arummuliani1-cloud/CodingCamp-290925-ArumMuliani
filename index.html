@@ -1,48 +1,62 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>To Do List Arum 💕</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To Do List Arum 💎</title>
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="app">
-    <header>
-      <h1>🧁 To Do List Kamu 💕</h1>
-      <p>✨ Kelola tugas harianmu dengan gaya lucu dan rapi ✨</p>
-    </header>
+    <div class="app">
+        <header>
+            <h1>💎 To Do List Kamu ✨</h1>
+            <p>Kelola tugas harianmu dengan gaya keren dan rapi.</p>
+        </header>
 
-        <section class="input-section">
-      <form id="task-form"> 
-        <input type="text" id="taskText" placeholder="Tugas baru..." />
-        <input type="date" id="taskDate" />
-        <input type="text" id="taskCategory" placeholder="Kategori (misal: Belanja)" />
-        <button type="submit">➕ Tambah</button> 
-      </form> 
-    </section>
+        <section class="navigation-section">
+            <button onclick="window.location.href='motivation.html'">
+                ✨ Lihat Motivasi Harian 💎
+            </button>
+        </section>
 
-        <section class="task-list"> 
-      <ul id="todo-list"> 
-              </ul>
-    </section>
+        <section class="input-section">
+            <form id="task-form"> 
+                <input type="text" id="taskText" placeholder="Tugas baru..." />
+                <input type="date" id="taskDate" />
+                <input type="text" id="taskCategory" placeholder="Kategori (misal: Kuliah)" />
+                <button type="submit">➕ Tambah</button> 
+            </form> 
+        </section>
 
-    <section class="daily-template">
-      <h2>📅 Jadwal Harian Aku</h2>
-      <ul>
-        <li>🌞 Pagi: Belanja</li>
-        <li>🍛 Siang: Kuliah & Upgrade skill</li>
-        <li>📲 Sore: Kegiatan ormawa dan Hima</li>
-      </ul>
-    </section>
+        <section class="filter-section">
+            <label for="filterTasks">Saring:</label>
+            <select id="filterTasks" onchange="filterTasks()">
+                <option value="all">Semua Tugas</option>
+                <option value="pending">Belum Selesai</option>
+                <option value="completed">Sudah Selesai</option>
+            </select>
+        </section>
 
-    <section class="notification">
-      <h2>🔔 Pengingat</h2>
-      <button onclick="sendReminder()">Kirim Pengingat</button>
-      <p id="reminderStatus"></p>
-    </section>
-  </div>
+        <section class="task-list"> 
+            <ul id="todo-list"> 
+                </ul>
+        </section>
 
-  <script src="script.js"></script>
+        <section class="daily-template">
+            <h2>📅 Jadwal Harian Aku</h2>
+            <ul>
+                <li>🌞 Pagi: Belanja</li>
+                <li>🍛 Siang: Kuliah & Upgrade skill</li>
+                <li>📲 Sore: Kegiatan ormawa dan Hima</li>
+            </ul>
+        </section>
+        <section class="notification">
+            <h2>🔔 Pengingat</h2>
+            <button onclick="sendReminder()">Kirim Pengingat</button>
+            <p id="reminderStatus"></p>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>

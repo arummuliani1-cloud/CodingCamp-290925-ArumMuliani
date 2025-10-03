@@ -1,91 +1,171 @@
+/* Warna Dasar */
+:root {
+    --primary-color: #1e88e5; /* Biru Cerah Keren */
+    --background-light: #e3f2fd; /* Biru Muda Sangat Pucat */
+    --card-background: #bbdefb; /* Biru Sedang Pucat */
+    --completed-color: #388e3c; /* Hijau Tua Keren */
+    --text-dark: #263238;
+}
+
+/* Reset dan Body */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 body {
-  margin: 0;
-  font-family: 'Quicksand', sans-serif;
-  background-color: #fff0f5;
-  color: #4b4b4b;
+    background-color: var(--background-light);
+    display: flex;
+    justify-content: center;
+    padding: 20px;
 }
 
 .app {
-  max-width: 600px;
-  margin: 40px auto;
-  padding: 20px;
-  background: #ffe4e1;
-  border-radius: 16px;
-  box-shadow: 0 0 10px rgba(255, 182, 193, 0.3);
+    width: 100%;
+    max-width: 600px;
+    background-color: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
+/* Header */
 header {
-  text-align: center;
-  margin-bottom: 20px;
+    text-align: center;
+    margin-bottom: 30px;
 }
 
 header h1 {
-  margin: 0;
-  color: #ff69b4;
+    color: var(--primary-color);
+    font-size: 2em;
 }
 
-.input-section {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 20px;
+header p {
+    color: #607d8b;
+    margin-top: 5px;
 }
 
-.input-section input {
-  flex: 1;
-  padding: 10px;
-  border: 1px solid #ffc0cb;
-  border-radius: 8px;
-  background-color: #fffafc;
+/* Input dan Filter Section (Rapi) */
+.input-section form, .filter-section {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    align-items: center;
+    flex-wrap: wrap; /* Agar rapi di layar kecil */
 }
 
-.input-section button {
-  padding: 10px 16px;
-  background: #ffb6c1;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
+.input-section input, .filter-section select {
+    padding: 10px;
+    border: 1px solid #cfd8dc;
+    border-radius: 8px;
+    flex-grow: 1; /* Agar input mengisi ruang yang tersedia */
+    min-width: 100px;
 }
 
-.task-list .task {
-  background: #fce4ec;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  border-left: 4px solid #ff69b4;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.input-section button, .navigation-section button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
 }
 
-.task.done {
-  background: #d4edda;
-  text-decoration: line-through;
+.input-section button:hover, .navigation-section button:hover {
+    background-color: #1565c0;
 }
 
-.task .info {
-  flex: 1;
+/* Task List */
+.todo-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--card-background);
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    border-left: 5px solid var(--primary-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.task .actions button {
-  margin-left: 10px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  font-size: 18px;
+.todo-item.completed {
+    background-color: #c8e6c9; /* Hijau Pucat */
+    border-left-color: var(--completed-color);
+    opacity: 0.8;
 }
 
-.daily-template, .notification {
-  margin-top: 30px;
-  background: #fffafc;
-  padding: 15px;
-  border-radius: 12px;
-  border: 1px dashed #ffb6c1;
+.todo-item.completed .task-info strong, 
+.todo-item.completed .task-info small {
+    text-decoration: line-through;
+    color: var(--completed-color);
 }
 
-.daily-template h2, .notification h2 {
-  margin-bottom: 10px;
-  color: #ff69b4;
+.task-info strong {
+    display: block;
+    color: var(--text-dark);
+}
+
+.task-info small {
+    color: #546e7a;
+}
+
+.category {
+    font-size: 0.8em;
+    padding: 3px 6px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 4px;
+    margin-left: 10px;
+}
+
+.actions button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 5px;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.complete-btn {
+    background-color: var(--completed-color);
+    color: white;
+}
+
+.delete-btn {
+    background-color: #d32f2f;
+    color: white;
+}
+
+/* Bagian Tambahan dan Motivasi Card */
+.daily-template, .notification, .motivation-card {
+    background-color: var(--background-light);
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 10px;
+    border: 1px dashed #90caf9;
+    text-align: center;
+}
+
+.daily-template ul {
+    list-style-position: inside;
+    text-align: left;
+    margin-top: 10px;
+}
+
+.motivation-card .quote-text {
+    font-size: 1.2em;
+    font-style: italic;
+    color: var(--text-dark);
+    margin: 15px 0;
+}
+
+.motivation-card .quote-source {
+    font-weight: bold;
+    color: var(--primary-color);
 }

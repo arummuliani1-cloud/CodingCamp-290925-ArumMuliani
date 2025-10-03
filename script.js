@@ -1,60 +1,66 @@
 // =================================================================
 // 1. VARIABEL GLOBAL & FUNGSI DASAR
 // =================================================================
-// Mengambil elemen HTML menggunakan ID
 const taskForm = document.getElementById('task-form');
 const taskInput = document.getElementById('taskText');
 const dateInput = document.getElementById('taskDate');
 const categoryInput = document.getElementById('taskCategory');
-const todoList = document.getElementById('todo-list'); // ID WADAH TUGAS
+const todoList = document.getElementById('todo-list');
 
-// Array tempat semua data tugas disimpan di memori sementara
 let tasks = [];
 
-// Menyimpan array tugas ke Local Storage (Persistence)
+// Menyimpan array tugas ke Local Storage
 function saveTasks() {
-    // Mengubah array JavaScript menjadi string JSON agar bisa disimpan
     localStorage.setItem('todos', JSON.stringify(tasks));
 }
 
 // Memuat data tugas dari Local Storage
 function loadTasks() {
-    // Mendapatkan data string dari Local Storage
     const savedTasks = localStorage.getItem('todos');
 
     if (savedTasks) {
-        // Jika ada data, ubah string JSON menjadi array JavaScript
         tasks = JSON.parse(savedTasks);
-        renderTasks(); // Langsung tampilkan tugas yang tersimpan
+        renderTasks();
     }
 }
 
 // =================================================================
-// 2. FUNGSI TAMPILAN (RENDER)
+// 2. FUNGSI TAMPILAN (RENDER) & FILTER
 // =================================================================
 
-// Fungsi untuk mengosongkan dan menampilkan ulang seluruh daftar dari array 'tasks'
-function renderTasks() {
-    todoList.innerHTML = ''; // Kosongkan tampilan HTML saat ini
+// Fungsi untuk penyaringan (dipanggil saat dropdown filter diubah)
+function filterTasks() {
+    const filterValue = document.getElementById('filterTasks').value;
+    renderTasks(filterValue);
+}
 
-    // Jika tidak ada tugas, tampilkan pesan
-    if (tasks.length === 0) {
-        todoList.innerHTML = '<p style="text-align: center; color: #a05252;">🌸 Belum ada tugas hari ini!</p>';
+// Fungsi utama untuk menampilkan tugas (sudah mendukung filter)
+function renderTasks(filterValue = 'all') {
+    todoList.innerHTML = '';
+
+    let filteredTasks = tasks;
+
+    // Logika penyaringan
+    if (filterValue === 'pending') {
+        filteredTasks = tasks.filter(task => !task.isCompleted);
+    } else if (filterValue === 'completed') {
+        filteredTasks = tasks.filter(task => task.isCompleted);
+    }
+
+    if (filteredTasks.length === 0) {
+        todoList.innerHTML = '<p style="text-align: center; color: #1e88e5;">🧊 Tidak ada tugas di kategori ini! 🧊</p>';
         return;
     }
 
-    // Loop (Perulangan) untuk setiap tugas di array 'tasks'
-    tasks.forEach(task => {
+    filteredTasks.forEach(task => {
         const li = createTaskElement(task);
         todoList.appendChild(li);
     });
 }
 
-// Fungsi pembantu untuk membuat elemen LI (item tugas) per tugas
 function createTaskElement(task) {
     const li = document.createElement('li');
     li.classList.add('todo-item');
-    // Tambahkan class 'completed' jika statusnya sudah selesai (untuk styling CSS)
     if (task.isCompleted) {
         li.classList.add('completed');
     }
@@ -67,9 +73,9 @@ function createTaskElement(task) {
         </span>
         <div class="actions">
             <button class="complete-btn" onclick="toggleComplete('${task.id}')">
-                ${task.isCompleted ? 'Belum Selesai' : 'Selesai'}
+                ${task.isCompleted ? '❌ Belum Selesai' : '✔️ Selesai'}
             </button>
-            <button class="delete-btn" onclick="deleteTask('${task.id}')">Hapus</button>
+            <button class="delete-btn" onclick="deleteTask('${task.id}')">🗑 Hapus</button>
         </div>
     `;
     return li;
@@ -80,21 +86,19 @@ function createTaskElement(task) {
 // =================================================================
 
 function addTask(event) {
-    event.preventDefault(); // Mencegah form refresh halaman
+    event.preventDefault(); 
 
     const taskText = taskInput.value.trim();
     const taskDate = dateInput.value;
     const taskCategory = categoryInput.value.trim() || 'Umum';
 
-    // Wajib: VALIDASI INPUT FORM
     if (taskText === '' || taskDate === '') {
         alert('Tugas dan Tanggal harus diisi!');
         return;
     }
 
-    // Buat objek tugas baru dengan ID unik
     const newTask = {
-        id: Date.now().toString(), // ID unik berdasarkan waktu
+        id: Date.now().toString(),
         text: taskText,
         date: taskDate,
         category: taskCategory,
@@ -103,49 +107,46 @@ function addTask(event) {
 
     tasks.push(newTask);
     
-    // Simpan ke Local Storage dan tampilkan ulang
     saveTasks(); 
-    renderTasks();
+    renderTasks(); 
 
-    // Bersihkan formulir
     taskInput.value = '';
     dateInput.value = '';
     categoryInput.value = '';
 }
 
 function deleteTask(taskId) {
-    // Filter array: membuat array baru tanpa tugas dengan ID yang cocok
     tasks = tasks.filter(task => task.id !== taskId);
-    
-    // Simpan ke Local Storage dan tampilkan ulang
     saveTasks(); 
     renderTasks();
 }
 
 function toggleComplete(taskId) {
-    // Cari index tugas di array
     const taskIndex = tasks.findIndex(task => task.id === taskId);
 
     if (taskIndex > -1) {
-        // Balik status Selesai/Belum Selesai
         tasks[taskIndex].isCompleted = !tasks[taskIndex].isCompleted;
-        
-        // Simpan ke Local Storage dan tampilkan ulang
         saveTasks(); 
         renderTasks();
     }
 }
 
-// [CATATAN: FUNGSI sendReminder tidak termasuk karena tidak wajib untuk tugas inti]
+// Tambahkan kembali fungsi pengingat (jika tombolnya ada di HTML)
+function sendReminder() {
+    const status = document.getElementById("reminderStatus");
+    status.textContent = "🔔 Jangan lupa cek tugas hari ini yaa ✨";
+    setTimeout(() => {
+        status.textContent = "";
+    }, 5000);
+}
+
 
 // =================================================================
-// 4. PENGATURAN AWAL (JALANKAN SAAT HALAMAN DIBUKA)
+// 4. PENGATURAN AWAL
 // =================================================================
 
-// 1. Hubungkan Tombol Tambah ke Fungsi (dipanggil saat form disubmit)
 if (taskForm) {
     taskForm.addEventListener('submit', addTask);
 }
 
-// 2. Muat Tugas yang Tersimpan saat Halaman dibuka
 document.addEventListener('DOMContentLoaded', loadTasks);
